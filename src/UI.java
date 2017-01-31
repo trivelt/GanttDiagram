@@ -1,9 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
@@ -19,8 +17,10 @@ public class UI extends JFrame {
     private int numberOfLines;
 
     private JTextField taskNameTextField;
-    private JTextField colorTextField;
+    private JComboBox<String> colorTextField;
     private JTextField lengthTextField;
+
+    private Task editedTask = null;
 
     public UI() {
         numberOfLines = Parameters.getInstance().numberOfLines;
@@ -61,7 +61,9 @@ public class UI extends JFrame {
         final JLabel colorLabel = new JLabel();
         colorLabel.setText("Color");
         panel.add(colorLabel);
-        colorTextField = new JTextField();
+        String[] colorStrings = {"BLUE", "GREEN", "ORANGE", "PINK", "RED"};
+        colorTextField = new JComboBox(colorStrings);
+        colorTextField.setSelectedIndex(0);
         panel.add(colorTextField);
 
         final JLabel lengthLabel = new JLabel();
@@ -77,6 +79,15 @@ public class UI extends JFrame {
         JButton removeButton = new JButton("Remove");
         removeButton.setEnabled(false);
         panel.add(removeButton);
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(editedTask == null)
+                    return;
+                System.out.println("Updated");
+            }
+        });
 
         add(panel, BorderLayout.NORTH);
     }
@@ -127,12 +138,6 @@ public class UI extends JFrame {
             for (Task task: tasks) {
                 drawTask(g2d, task);
             }
-
-//            Task t1 = new Task("task1", 250, Color.GREEN, 120, lineHeight+taskVerticalOffset);
-//            drawTask(g2d, t1);
-//
-//            Task t2 = new Task("drugie zadanie", 180, Color.PINK, 400, lineHeight+taskVerticalOffset);
-//            drawTask(g2d, t2);
         }
 
         private void drawTask(Graphics2D g2d, Task task) {
@@ -160,14 +165,17 @@ public class UI extends JFrame {
         public void mouseClicked(MouseEvent e) {
             Task clickedTask = tasksManager.getTask(e.getX(), e.getY());
             if(clickedTask == null) {
-                System.out.println("NULL");
+                editedTask = null;
+                taskNameTextField.setText("");
+                lengthTextField.setText("");
+
             } else {
-                System.out.println(clickedTask.getName());
                 taskNameTextField.setText(clickedTask.getName());
                 lengthTextField.setText(Integer.toString(clickedTask.getLength()));
-                colorTextField.setText(clickedTask.getColor().toString());
+                colorTextField.setSelectedIndex(ColorHelper.colorToIndex(clickedTask.getColor()));
+//                colorTextField.setText(clickedTask.getColor().toString());
+                editedTask = clickedTask;
             }
-//            System.out.println("mouseClicked");
         }
 
         @Override
