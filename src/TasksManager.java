@@ -61,6 +61,9 @@ public class TasksManager {
             if(otherTask == task)
                 continue;
 
+            if(otherTask.getY() != task.getY())
+                continue;
+
             if(otherTask.getX() <= task.getX() + newLength && otherTask.getX() >= task.getX() + task.getLength())
                 return true;
         }

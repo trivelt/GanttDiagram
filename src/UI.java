@@ -113,6 +113,12 @@ public class UI extends JFrame {
                     return;
                 tasksManager.removeTask(editedTask);
                 drawingPanel.repaint();
+                editedTask = null;
+
+                taskNameTextField.setText("");
+                lengthSpinner.setValue(0);
+                updateButton.setEnabled(false);
+                removeButton.setEnabled(false);
             }
         });
 
