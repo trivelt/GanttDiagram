@@ -95,7 +95,6 @@ public class TasksManager {
     }
 
     public boolean isCollisionAfterMove(Task task, int newX, int newY) {
-        System.out.println("newX=" + newX);
         if(newX < 85 || newX+task.getLength() > UI.frameWidth)
             return true;
 

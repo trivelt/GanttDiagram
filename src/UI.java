@@ -140,7 +140,6 @@ public class UI extends JFrame {
 
     class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener {
         public DrawingPanel() {
-            System.out.println("Creating drawing panel");
             addMouseListener(this);
             addMouseMotionListener(this);
             repaint();
