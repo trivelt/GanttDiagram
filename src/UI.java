@@ -22,6 +22,9 @@ public class UI extends JFrame {
     private JButton updateButton;
 
     private Task editedTask = null;
+    private Task movingTask = null;
+    private int movedTaskX = 0;
+    private int movedTaskY = 0;
 
     public UI() {
         numberOfLines = Parameters.getInstance().numberOfLines;
@@ -109,7 +112,7 @@ public class UI extends JFrame {
                 if(editedTask == null)
                     return;
                 tasksManager.removeTask(editedTask);
-                repaint();
+                drawingPanel.repaint();
             }
         });
 
@@ -166,14 +169,18 @@ public class UI extends JFrame {
 
         private void drawTask(Graphics2D g2d, Task task) {
             g2d.setColor(task.getColor());
-            g2d.fillRoundRect(task.getX(),task.getY(), task.getLength(), taskHeight, 20, 20);
-
             Font font = new Font("Verdana", Font.ITALIC, 15);
             g2d.setFont(font);
-            g2d.setColor(Color.BLACK);
-            float textPosX = task.getX() + (float)(1.0/3.0)*(float)task.getLength();
-            float textPosY = task.getY() + lineHeight * (float)(1.0/2.0);
-            g2d.drawString(task.getName(), (textPosX), textPosY);
+            if(task == movingTask) {
+                g2d.fillRoundRect(movedTaskX, movedTaskY, task.getLength(), taskHeight, 20, 20);
+            } else
+            {
+                g2d.fillRoundRect(task.getX(),task.getY(), task.getLength(), taskHeight, 20, 20);
+                g2d.setColor(Color.BLACK);
+                float textPosX = task.getX() + (float)(1.0/3.0)*(float)task.getLength();
+                float textPosY = task.getY() + lineHeight * (float)(1.0/2.0);
+                g2d.drawString(task.getName(), (textPosX), textPosY);
+            }
         }
 
         public void paintComponent(Graphics g) {
@@ -207,11 +214,35 @@ public class UI extends JFrame {
 
         @Override
         public void mousePressed(MouseEvent e) {
+            Task clickedTask = tasksManager.getTask(e.getX(), e.getY());
+            if(clickedTask == null) {
+                movingTask = null;
+                return;
+            }
+            movingTask = clickedTask;
+            movedTaskX = clickedTask.getX();
+            movedTaskY = clickedTask.getY();
 //            System.out.println("mousePressed");
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
+                if(movingTask == null) {
+                    return;
+                }
+
+                if(movedTaskX == movingTask.getX() && movedTaskY == movingTask.getY()) {
+                    movingTask = null;
+                    repaint();
+                    return;
+                }
+
+                movedTaskY = tasksManager.getBestYPosAfterMove(movedTaskY);
+                if(!tasksManager.isCollisionAfterMove(movingTask, movedTaskX, movedTaskY)) {
+                    movingTask.setPos(movedTaskX, movedTaskY);
+                }
+                movingTask = null;
+                repaint();
 //            System.out.println("mouseReleased");
         }
 
@@ -227,6 +258,12 @@ public class UI extends JFrame {
 
         @Override
         public void mouseDragged(MouseEvent e) {
+            if(movingTask == null)
+                return;
+
+            movedTaskX = e.getX();
+            movedTaskY = e.getY();
+            repaint();
 //            System.out.println("mouseDragged");
         }
 

@@ -67,8 +67,41 @@ public class TasksManager {
         return false;
     }
 
+    public int getBestYPosAfterMove(int y) {
+        Parameters parameters = Parameters.getInstance();
+
+        int firstLine = UI.taskVerticalOffset;
+        int lastLine = UI.lineHeight*(parameters.numberOfLines-1)+UI.taskVerticalOffset;
+
+        if(y < firstLine)
+            return firstLine;
+        else if(y > lastLine)
+            return lastLine;
+        else {
+            int numberofLine = y/UI.lineHeight;
+            return UI.lineHeight*numberofLine+UI.taskVerticalOffset;
+        }
+    }
+
     public boolean isCollisionAfterMove(Task task, int newX, int newY) {
-        return true;
+        if(newX < 85 || newX > UI.lineWidth)
+            return true;
+
+        for(Task otherTask : tasks) {
+            if(otherTask == task)
+                continue;
+
+            if(otherTask.getY() != newY)
+                continue;
+
+            if(otherTask.getX() <= newX && otherTask.getX()+otherTask.getLength() >= newX)
+                return true;
+
+            if(otherTask.getX() <= newX + task.getLength() && otherTask.getX() + otherTask.getLength() >= newX + task.getLength())
+                return true;
+        }
+
+        return false;
     }
 
     public void removeTask(Task task) {

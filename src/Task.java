@@ -7,6 +7,10 @@ public class Task {
         this.color = color;
         this.xCoord = x;
         this.yCoord = y;
+
+        this.isMoved = false;
+        this.movingX = 0;
+        this.movingY = 0;
     }
 
     public String getName() {
@@ -46,10 +50,35 @@ public class Task {
         yCoord = y;
     }
 
+    public void setMovingPos(int x, int y) {
+        movingX = x;
+        movingY = y;
+    }
+
+    public int getMovingX() {
+        return movingX;
+    }
+
+    public int getMovingY() {
+        return movingY;
+    }
+
+    public boolean isMoved() {
+        return isMoved;
+    }
+
+    public void setMove(boolean isMoved) {
+        this.isMoved = isMoved;
+    }
+
     private String name;
     private int length;
     private Color color;
 
     private int xCoord;
     private int yCoord;
+
+    private boolean isMoved;
+    private int movingX;
+    private int movingY;
 }
