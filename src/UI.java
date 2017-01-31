@@ -13,6 +13,7 @@ public class UI extends JFrame {
 
     private TasksManager tasksManager;
     private DrawingPanel drawingPanel;
+    private JPanel configPanel;
     private int numberOfLines;
 
     private JTextField taskNameTextField;
@@ -27,20 +28,28 @@ public class UI extends JFrame {
     private int movedTaskY = 0;
 
     public UI() {
-        numberOfLines = Parameters.getInstance().numberOfLines;
         tasksManager = new TasksManager();
-        tasksManager.createTasks();
+//        tasksManager.createTasks();
 
         setLayout(new BorderLayout());
         setLocationRelativeTo( null );
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setSize(800, 600);
         setTitle("Gantt Diagram");
-        createDetailsPanel();
-        createDiagramPanel();
+        createConfigPanel();
 
         setWindowInCentre();
         setVisible(true);
+    }
+
+    private void runApp() {
+        configPanel.setVisible(false);
+        remove(configPanel);
+        tasksManager.createTasks();
+        numberOfLines = Parameters.getInstance().numberOfLines;
+        createDetailsPanel();
+        createDiagramPanel();
     }
 
     private void setWindowInCentre() {
@@ -52,8 +61,6 @@ public class UI extends JFrame {
 
     private void createDetailsPanel() {
         JPanel panel = new JPanel();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
         panel.setLayout(new GridLayout(4,2));
 
         final JLabel taskNameLabel = new JLabel();
@@ -277,6 +284,54 @@ public class UI extends JFrame {
         public void mouseMoved(MouseEvent e) {
 //            System.out.println("mouseMoved");
         }
+    }
+
+
+    private void createConfigPanel() {
+        Font font = new Font("Verdana", Font.BOLD, 19);
+        configPanel = new JPanel();
+        configPanel.setLayout(new GridLayout(2, 1));
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2));
+
+        final JLabel numberOfLinesLabel = new JLabel();
+        numberOfLinesLabel.setText("Number of lines:");
+        panel.add(numberOfLinesLabel);
+
+        SpinnerNumberModel linesSpinnerModel = new SpinnerNumberModel(1, 1, 8, 1);
+        JSpinner numberOfLinesSpinner = new JSpinner(linesSpinnerModel);
+        numberOfLinesSpinner.setValue(6);
+        numberOfLinesSpinner.setFont(font);
+        panel.add(numberOfLinesSpinner);
+
+
+        final JLabel numberOfTasksLabel = new JLabel();
+        numberOfTasksLabel.setText("Number of tasks:");
+        panel.add(numberOfTasksLabel);
+
+        SpinnerNumberModel tasksSpinnerModel = new SpinnerNumberModel(0, 0, 100, 1);
+        JSpinner numberOfTasksSpinner = new JSpinner(tasksSpinnerModel);
+        numberOfTasksSpinner.setValue(5);
+        numberOfTasksSpinner.setFont(font);
+        panel.add(numberOfTasksSpinner);
+
+        JButton okButton = new JButton();
+        okButton.setText("OK");
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Parameters parameters = Parameters.getInstance();
+                parameters.numberOfLines = (int) numberOfLinesSpinner.getValue();
+                parameters.numberOfTasks = (int) numberOfTasksSpinner.getValue();
+
+                runApp();
+            }
+        });
+
+        configPanel.add(panel);
+        configPanel.add(okButton);
+        add(configPanel);
     }
 
 }

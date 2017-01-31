@@ -27,7 +27,12 @@ public class TasksManager {
         if(tasksPerLine != 0) {
             maxLengthOfTaskInNormalLine = UI.lineWidth / tasksPerLine;
         }
-        int maxLengthOfTaskInLastLine = UI.lineWidth / (tasksPerLine + additionalTasks);
+
+        int maxLengthOfTaskInLastLine = 0;
+        if(tasksPerLine + additionalTasks != 0) {
+            maxLengthOfTaskInLastLine = UI.lineWidth / (tasksPerLine + additionalTasks);
+        }
+
 
         int taskCounter = 1;
         for(int i=1; i<=parameters.numberOfLines; i++) {
