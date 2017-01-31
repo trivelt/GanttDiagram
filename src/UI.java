@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class UI extends JFrame {
 
+    static final int frameWidth = 800;
     static final int lineWidth = 715;
     static final int lineHeight = 60;
     static final int taskHeight = lineHeight-10;
@@ -33,7 +34,7 @@ public class UI extends JFrame {
         setLocationRelativeTo( null );
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        setSize(800, 600);
+        setSize(frameWidth, 600);
         setTitle("Gantt Diagram");
         createConfigPanel();
 

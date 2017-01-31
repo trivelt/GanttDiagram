@@ -62,6 +62,9 @@ public class TasksManager {
     }
 
     public boolean isCollisionAfterResize(Task task, int newLength) {
+        if(task.getX()+newLength > UI.frameWidth)
+            return true;
+
         for(Task otherTask : tasks) {
             if(otherTask == task)
                 continue;
@@ -92,7 +95,8 @@ public class TasksManager {
     }
 
     public boolean isCollisionAfterMove(Task task, int newX, int newY) {
-        if(newX < 85 || newX > UI.lineWidth)
+        System.out.println("newX=" + newX);
+        if(newX < 85 || newX+task.getLength() > UI.frameWidth)
             return true;
 
         for(Task otherTask : tasks) {
