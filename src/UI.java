@@ -18,6 +18,8 @@ public class UI extends JFrame {
     private JTextField taskNameTextField;
     private JComboBox<String> colorComboBox;
     private JSpinner lengthSpinner;
+    private JButton removeButton;
+    private JButton updateButton;
 
     private Task editedTask = null;
 
@@ -72,10 +74,11 @@ public class UI extends JFrame {
         lengthSpinner = new JSpinner(spinnerModel);
         panel.add(lengthSpinner);
 
-        JButton updateButton = new JButton("Update");
+        updateButton = new JButton("Update");
+        updateButton.setEnabled(false);
         panel.add(updateButton);
 
-        JButton removeButton = new JButton("Remove");
+        removeButton = new JButton("Remove");
         removeButton.setEnabled(false);
         panel.add(removeButton);
 
@@ -92,9 +95,21 @@ public class UI extends JFrame {
                 int newLength = (int) lengthSpinner.getValue();
                 if(!tasksManager.isCollisionAfterResize(editedTask, newLength)) {
                     editedTask.setLength(newLength);
+                } else {
+                    lengthSpinner.setValue(editedTask.getLength());
                 }
 
                 drawingPanel.repaint();
+            }
+        });
+
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(editedTask == null)
+                    return;
+                tasksManager.removeTask(editedTask);
+                repaint();
             }
         });
 
@@ -177,12 +192,16 @@ public class UI extends JFrame {
                 editedTask = null;
                 taskNameTextField.setText("");
                 lengthSpinner.setValue(0);
+                updateButton.setEnabled(false);
+                removeButton.setEnabled(false);
 
             } else {
                 taskNameTextField.setText(clickedTask.getName());
                 lengthSpinner.setValue(clickedTask.getLength());
                 colorComboBox.setSelectedIndex(ColorHelper.colorToIndex(clickedTask.getColor()));
                 editedTask = clickedTask;
+                updateButton.setEnabled(true);
+                removeButton.setEnabled(true);
             }
         }
 

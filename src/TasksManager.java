@@ -71,5 +71,9 @@ public class TasksManager {
         return true;
     }
 
+    public void removeTask(Task task) {
+        tasks.remove(task);
+    }
+
 
 }
