@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Line2D;
@@ -17,8 +16,8 @@ public class UI extends JFrame {
     private int numberOfLines;
 
     private JTextField taskNameTextField;
-    private JComboBox<String> colorTextField;
-    private JTextField lengthTextField;
+    private JComboBox<String> colorComboBox;
+    private JSpinner lengthSpinner;
 
     private Task editedTask = null;
 
@@ -62,16 +61,16 @@ public class UI extends JFrame {
         colorLabel.setText("Color");
         panel.add(colorLabel);
         String[] colorStrings = {"BLUE", "GREEN", "ORANGE", "PINK", "RED"};
-        colorTextField = new JComboBox(colorStrings);
-        colorTextField.setSelectedIndex(0);
-        panel.add(colorTextField);
+        colorComboBox = new JComboBox(colorStrings);
+        colorComboBox.setSelectedIndex(0);
+        panel.add(colorComboBox);
 
         final JLabel lengthLabel = new JLabel();
         lengthLabel.setText("Length");
         panel.add(lengthLabel);
-        lengthTextField = new JTextField();
-        panel.add(lengthTextField);
-
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, lineWidth, 1);
+        lengthSpinner = new JSpinner(spinnerModel);
+        panel.add(lengthSpinner);
 
         JButton updateButton = new JButton("Update");
         panel.add(updateButton);
@@ -85,7 +84,17 @@ public class UI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(editedTask == null)
                     return;
-                System.out.println("Updated");
+                editedTask.setName(taskNameTextField.getText());
+
+                String selectedColor = colorComboBox.getSelectedItem().toString();
+                editedTask.setColor(ColorHelper.stringToColor(selectedColor));
+
+                int newLength = (int) lengthSpinner.getValue();
+                if(!tasksManager.isCollisionAfterResize(editedTask, newLength)) {
+                    editedTask.setLength(newLength);
+                }
+
+                drawingPanel.repaint();
             }
         });
 
@@ -167,13 +176,12 @@ public class UI extends JFrame {
             if(clickedTask == null) {
                 editedTask = null;
                 taskNameTextField.setText("");
-                lengthTextField.setText("");
+                lengthSpinner.setValue(0);
 
             } else {
                 taskNameTextField.setText(clickedTask.getName());
-                lengthTextField.setText(Integer.toString(clickedTask.getLength()));
-                colorTextField.setSelectedIndex(ColorHelper.colorToIndex(clickedTask.getColor()));
-//                colorTextField.setText(clickedTask.getColor().toString());
+                lengthSpinner.setValue(clickedTask.getLength());
+                colorComboBox.setSelectedIndex(ColorHelper.colorToIndex(clickedTask.getColor()));
                 editedTask = clickedTask;
             }
         }

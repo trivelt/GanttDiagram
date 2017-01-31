@@ -56,5 +56,20 @@ public class TasksManager {
         return null;
     }
 
+    public boolean isCollisionAfterResize(Task task, int newLength) {
+        for(Task otherTask : tasks) {
+            if(otherTask == task)
+                continue;
+
+            if(otherTask.getX() <= task.getX() + newLength && otherTask.getX() >= task.getX() + task.getLength())
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isCollisionAfterMove(Task task, int newX, int newY) {
+        return true;
+    }
+
 
 }
