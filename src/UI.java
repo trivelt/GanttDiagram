@@ -5,17 +5,24 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 public class UI extends JFrame {
 
-    static final int numberOfLines = 6;
+    static final int lineWidth = 715;
     static final int lineHeight = 60;
     static final int taskHeight = lineHeight-10;
     static final int taskVerticalOffset = 5;
 
+    private TasksManager tasksManager;
     private DrawingPanel drawingPanel;
+    private int numberOfLines;
 
     public UI() {
+        numberOfLines = Parameters.getInstance().numberOfLines;
+        tasksManager = new TasksManager();
+        tasksManager.createTasks();
+
         setLayout(new BorderLayout());
         setLocationRelativeTo( null );
         setResizable(false);
@@ -112,21 +119,16 @@ public class UI extends JFrame {
         }
 
         private void drawTasks(Graphics2D g2d) {
-            Task t1 = new Task("task1", 250, Color.GREEN, 120, lineHeight+taskVerticalOffset);
-            drawTask(g2d, t1);
+            ArrayList<Task> tasks = tasksManager.getTasks();
+            for (Task task: tasks) {
+                drawTask(g2d, task);
+            }
 
-            Task t2 = new Task("drugie zadanie", 180, Color.PINK, 400, lineHeight+taskVerticalOffset);
-            drawTask(g2d, t2);
-
-//            g2d.setColor(t1.getColor());
-//            g2d.fillRoundRect(t1.getX(),t1.getY(), t1.getLength(), taskHeight, 20, 20);
+//            Task t1 = new Task("task1", 250, Color.GREEN, 120, lineHeight+taskVerticalOffset);
+//            drawTask(g2d, t1);
 //
-//            Font font = new Font("Verdana", Font.ITALIC, 15);
-//            g2d.setFont(font);
-//            g2d.setColor(Color.BLACK);
-//            float textPosX = t1.getX() + (float)(1.0/3.0)*(float)t1.getLength();
-//            float textPosY = t1.getY() + lineHeight * (float)(1.0/2.0);
-//            g2d.drawString(t1.getName(), (textPosX), textPosY);
+//            Task t2 = new Task("drugie zadanie", 180, Color.PINK, 400, lineHeight+taskVerticalOffset);
+//            drawTask(g2d, t2);
         }
 
         private void drawTask(Graphics2D g2d, Task task) {
@@ -152,6 +154,7 @@ public class UI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+//            e.getX
 //            System.out.println("mouseClicked");
         }
 
