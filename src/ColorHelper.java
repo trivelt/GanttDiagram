@@ -1,8 +1,5 @@
 import java.awt.*;
 
-/**
- * Created by maciej on 31.01.17.
- */
 public class ColorHelper {
 
 static String[] colorStrings = {"BLUE", "GREEN", "ORANGE", "PINK", "RED"};

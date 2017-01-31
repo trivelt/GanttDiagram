@@ -29,8 +29,6 @@ public class UI extends JFrame {
 
     public UI() {
         tasksManager = new TasksManager();
-//        tasksManager.createTasks();
-
         setLayout(new BorderLayout());
         setLocationRelativeTo( null );
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -235,7 +233,6 @@ public class UI extends JFrame {
             movingTask = clickedTask;
             movedTaskX = clickedTask.getX();
             movedTaskY = clickedTask.getY();
-//            System.out.println("mousePressed");
         }
 
         @Override
@@ -256,17 +253,14 @@ public class UI extends JFrame {
                 }
                 movingTask = null;
                 repaint();
-//            System.out.println("mouseReleased");
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-//            System.out.println("mouseEntered");
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-//            System.out.println("mouseExited");
         }
 
         @Override
@@ -277,12 +271,10 @@ public class UI extends JFrame {
             movedTaskX = e.getX();
             movedTaskY = e.getY();
             repaint();
-//            System.out.println("mouseDragged");
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
-//            System.out.println("mouseMoved");
         }
     }
 
