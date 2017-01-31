@@ -18,6 +18,10 @@ public class UI extends JFrame {
     private DrawingPanel drawingPanel;
     private int numberOfLines;
 
+    private JTextField taskNameTextField;
+    private JTextField colorTextField;
+    private JTextField lengthTextField;
+
     public UI() {
         numberOfLines = Parameters.getInstance().numberOfLines;
         tasksManager = new TasksManager();
@@ -51,19 +55,19 @@ public class UI extends JFrame {
         final JLabel taskNameLabel = new JLabel();
         taskNameLabel.setText("Task name:");
         panel.add(taskNameLabel);
-        final JTextField taskNameTextField = new JTextField();
+        taskNameTextField = new JTextField();
         panel.add(taskNameTextField);
 
         final JLabel colorLabel = new JLabel();
         colorLabel.setText("Color");
         panel.add(colorLabel);
-        final JTextField colorTextField = new JTextField();
+        colorTextField = new JTextField();
         panel.add(colorTextField);
 
         final JLabel lengthLabel = new JLabel();
         lengthLabel.setText("Length");
         panel.add(lengthLabel);
-        final JTextField lengthTextField = new JTextField();
+        lengthTextField = new JTextField();
         panel.add(lengthTextField);
 
 
@@ -154,7 +158,15 @@ public class UI extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-//            e.getX
+            Task clickedTask = tasksManager.getTask(e.getX(), e.getY());
+            if(clickedTask == null) {
+                System.out.println("NULL");
+            } else {
+                System.out.println(clickedTask.getName());
+                taskNameTextField.setText(clickedTask.getName());
+                lengthTextField.setText(Integer.toString(clickedTask.getLength()));
+                colorTextField.setText(clickedTask.getColor().toString());
+            }
 //            System.out.println("mouseClicked");
         }
 
