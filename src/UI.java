@@ -10,6 +10,8 @@ public class UI extends JFrame {
 
     static final int numberOfLines = 6;
     static final int lineHeight = 60;
+    static final int taskHeight = lineHeight-10;
+    static final int taskVerticalOffset = 5;
 
     private DrawingPanel drawingPanel;
 
@@ -22,7 +24,15 @@ public class UI extends JFrame {
         createDetailsPanel();
         createDiagramPanel();
 
+        setWindowInCentre();
         setVisible(true);
+    }
+
+    private void setWindowInCentre() {
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+        setLocation(x, y);
     }
 
     private void createDetailsPanel() {
@@ -101,12 +111,43 @@ public class UI extends JFrame {
             }
         }
 
+        private void drawTasks(Graphics2D g2d) {
+            Task t1 = new Task("task1", 250, Color.GREEN, 120, lineHeight+taskVerticalOffset);
+            drawTask(g2d, t1);
+
+            Task t2 = new Task("drugie zadanie", 180, Color.PINK, 400, lineHeight+taskVerticalOffset);
+            drawTask(g2d, t2);
+
+//            g2d.setColor(t1.getColor());
+//            g2d.fillRoundRect(t1.getX(),t1.getY(), t1.getLength(), taskHeight, 20, 20);
+//
+//            Font font = new Font("Verdana", Font.ITALIC, 15);
+//            g2d.setFont(font);
+//            g2d.setColor(Color.BLACK);
+//            float textPosX = t1.getX() + (float)(1.0/3.0)*(float)t1.getLength();
+//            float textPosY = t1.getY() + lineHeight * (float)(1.0/2.0);
+//            g2d.drawString(t1.getName(), (textPosX), textPosY);
+        }
+
+        private void drawTask(Graphics2D g2d, Task task) {
+            g2d.setColor(task.getColor());
+            g2d.fillRoundRect(task.getX(),task.getY(), task.getLength(), taskHeight, 20, 20);
+
+            Font font = new Font("Verdana", Font.ITALIC, 15);
+            g2d.setFont(font);
+            g2d.setColor(Color.BLACK);
+            float textPosX = task.getX() + (float)(1.0/3.0)*(float)task.getLength();
+            float textPosY = task.getY() + lineHeight * (float)(1.0/2.0);
+            g2d.drawString(task.getName(), (textPosX), textPosY);
+        }
+
         public void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D)g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             drawBackground(g2d);
             drawLines(g2d);
+            drawTasks(g2d);
         }
 
         @Override
